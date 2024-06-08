@@ -24,9 +24,7 @@ export async function addCommentToPR(fileName: string, comment: string, httpsAge
     headers: { 'Authorization': `Bearer ${tl.getVariable('SYSTEM.ACCESSTOKEN')}`, 'Content-Type': 'application/json' },
     body: JSON.stringify(body),
     agent: httpsAgent
-  });
-
-  console.log(`New comment added.`);
+  }).then(response => console.log(`New comment added.`)).catch(reason => console.log(`Failed to add comment: ${reason}`));
 }
 
 export async function deleteExistingComments(httpsAgent: Agent) {

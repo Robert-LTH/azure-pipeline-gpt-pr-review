@@ -2,9 +2,9 @@
   "id": "b42fa530-c4a6-11ed-87f6-d1f44a1fead1",
   "name": "GPTPullRequestReview",
   "friendlyName": "Review PullRequest by GPT",
-  "description": "This task use OpenAi GPT model to review PullRequests",
-  "author": "Mustapha Larhrouch",
-  "helpMarkDown": "[More Information](https://github.com/mlarhrouch/azure-pipeline-gpt-pr-review)",
+  "description": "This task use OpenAi GPT model to review PullRequests. Based on the original work of Mustapha Larhrouch.",
+  "author": "Robert Johnsson",
+  "helpMarkDown": "[More Information](https://github.com/robert-lth/azure-pipeline-gpt-pr-review)",
   "category": "Utility",
   "visibility": [
     "Build"
@@ -12,19 +12,54 @@
   "demands": [],
   "version": {
     "Major": "0",
-    "Minor": "12",
-    "Patch": "3"
+    "Minor": "17",
+    "Patch": "2"
   },
   "minimumAgentVersion": "1.95.0",
   "instanceNameFormat": "GPTPullRequestReview $(message)",
+  "groups": [
+    {
+      "name": "azureopenai",
+      "displayName": "Azure OpenAI"
+    },
+    {
+      "name": "openai",
+      "displayName": "OpenAI"
+    }
+  ],
   "inputs": [
+    {
+      "name": "max_tokens",
+      "type": "number",
+      "label": "Maximum amount of tokens",
+      "defaultValue": "500",
+      "required": false,
+      "helpMarkDown": "Maximum amount of tokens to use in requests. If left empty, a default value of 500 will be used."
+    },
+    {
+      "name": "prompt_instructions",
+      "type": "multiLine",
+      "label": "System prompt",
+      "defaultValue": "",
+      "required": false,
+      "helpMarkDown": "The prompt used during review. If left empty, a default prompt will be used."
+    },
+    {
+      "name": "deployment_id",
+      "type": "string",
+      "label": "Deployment Id",
+      "defaultValue": "",
+      "required": false,
+      "helpMarkDown": "Deployment Id of Azure OpenAI deployment.",
+      "groupName": "azureopenai"
+    },
     {
       "name": "api_key",
       "type": "string",
       "label": "Api key",
       "defaultValue": "",
       "required": true,
-      "helpMarkDown": "Api key of OpenAi or Azure OpenAI."
+      "helpMarkDown": "Api key for OpenAi or Azure OpenAI."
     },
     {
       "name": "model",
@@ -37,15 +72,17 @@
         "gpt-3.5-turbo": "GPT 3.5 Turbo",
         "gpt-3.5-turbo-16k": "GPT 3.5 Turbo 16k"
       },
-      "helpMarkDown": "The OpenAI model to use. not used if you use Azure OpenAI. if no model is selected, the GPT 3.5 Turbo model is used."
+      "helpMarkDown": "The OpenAI model to use. not used if you use Azure OpenAI. if no model is selected, the GPT 3.5 Turbo model is used.",
+      "groupName": "openai"
     },
     {
       "name": "aoi_endpoint",
       "type": "string",
-      "label": "Azure OpenApi Endpoint",
+      "label": "Azure OpenAi Endpoint",
       "defaultValue": "",
       "required": false,
-      "helpMarkDown": "Azure OpenApi Endpoint, leave empty to use default endpoint. (optional)"
+      "helpMarkDown": "Azure OpenAi Endpoint, leave empty to use default endpoint. (optional)",
+      "groupName": "azureopenai"
     },
     {
       "name": "support_self_signed_certificate",
@@ -57,7 +94,7 @@
     }
   ],
   "execution": {
-    "Node10": {
+    "Node16": {
       "target": "dist/index.js"
     }
   }
